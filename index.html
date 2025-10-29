@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTION APPETITES - Food & Travel Photography</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e67e22;
+            --secondary: #e74c3c;
+            --accent: #27ae60;
+            --dark: #2c3e50;
+            --light: #f9f9f9;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+        }
+        
+        .gallery-item {
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+        
+        .gallery-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .adventure-card {
+            transition: all 0.3s ease;
+        }
+        
+        .adventure-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .menu-btn {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .menu-btn__burger {
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-btn__burger::before,
+        .menu-btn__burger::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-btn__burger::before {
+            transform: translateY(-8px);
+        }
+        
+        .menu-btn__burger::after {
+            transform: translateY(8px);
+        }
+        
+        .menu-btn.open .menu-btn__burger {
+            transform: translateX(-50px);
+            background: transparent;
+        }
+        
+        .menu-btn.open .menu-btn__burger::before {
+            transform: rotate(45deg) translate(35px, -35px);
+            background: var(--dark);
+        }
+        
+        .menu-btn.open .menu-btn__burger::after {
+            transform: rotate(-45deg) translate(35px, 35px);
+            background: var(--dark);
+        }
+        
+        .nav-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-menu.open {
+            transform: translateX(0);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .custom-cursor {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="cursor-dot hidden md:block"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black bg-opacity-80 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="logo text-2xl font-bold text-white">MOTION APPETITES</a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-white hover:text-orange-400 transition">Home</a>
+                <a href="#gallery" class="text-white hover:text-orange-400 transition">Gallery</a>
+                <a href="#adventures" class="text-white hover:text-orange-400 transition">Adventures</a>
+                <a href="#about" class="text-white hover:text-orange-400 transition">About</a>
+                <a href="#contact" class="text-white hover:text-orange-400 transition">Contact</a>
+            </div>
+            
+            <div class="md:hidden">
+                <button class="menu-btn">
+                    <div class="menu-btn__burger"></div>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="nav-menu fixed inset-0 bg-white z-40 flex items-center justify-center">
+        <div class="text-center space-y-8">
+            <a href="#home" class="block text-2xl font-bold text-gray-800 hover:text-orange-500 transition">Home</a>
+            <a href="#gallery" class="block text-2xl font-bold text-gray-800 hover:text-orange-500 transition">Gallery</a>
+            <a href="#adventures" class="block text-2xl font-bold text-gray-800 hover:text-orange-500 transition">Adventures</a>
+            <a href="#about" class="block text-2xl font-bold text-gray-800 hover:text-orange-500 transition">About</a>
+            <a href="#contact" class="block text-2xl font-bold text-gray-800 hover:text-orange-500 transition">Contact</a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero flex items-center justify-center text-center text-white relative overflow-hidden">
+        <div class="container px-6 mx-auto">
+            <div class="animate-fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 logo">MOTION APPETITES</h1>
+                <p class="text-xl md:text-2xl mb-6 font-light">Food & Travel shots <span class="text-orange-400">🌍</span></p>
+                <p class="text-lg md:text-xl mb-8">Street food • Local eats • Global vibes <span class="text-orange-400">🍴✈️</span></p>
+                <p class="text-sm md:text-base uppercase tracking-widest">Witness of the real</p>
+            </div>
+            
+            <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+                <a href="#gallery" class="text-white">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Culinary Moments</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Capturing the essence of authentic street food and local delicacies from around the world</p>
+            </div>
+            
+            <!-- Gallery Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 animate-fade-in delay-100">
+                <button class="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition">All</button>
+                <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-orange-500 hover:text-white transition">Street Food</button>
+                <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-orange-500 hover:text-white transition">Restaurants</button>
+                <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-orange-500 hover:text-white transition">Markets</button>
+                <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-orange-500 hover:text-white transition">Desserts</button>
+                <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-orange-500 hover:text-white transition">Drinks</button>
+            </div>
+            
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Item 1 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-64 animate-fade-in delay-100">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Street food in Cairo" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Koshari</h3>
+                            <p class="text-white">Cairo, Egypt</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-96 animate-fade-in delay-200">
+                    <img src="https://images.unsplash.com/photo-1510626176961-4b1d6941d838?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Spices in Istanbul" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Spice Bazaar</h3>
+                            <p class="text-white">Istanbul, Turkey</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-64 animate-fade-in delay-300">
+                    <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80" alt="Tagine in Marrakech" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Tagine</h3>
+                            <p class="text-white">Marrakech, Morocco</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-64 animate-fade-in delay-100">
+                    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Falafel in Beirut" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Falafel</h3>
+                            <p class="text-white">Beirut, Lebanon</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 5 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-96 animate-fade-in delay-200">
+                    <img src="https://images.unsplash.com/photo-1601050691231-d8625d5d5293?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Baklava in Damascus" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Baklava</h3>
+                            <p class="text-white">Damascus, Syria</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Item 6 -->
+                <div class="gallery-item relative rounded-lg overflow-hidden h-64 animate-fade-in delay-300">
+                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Shawarma in Amman" class="w-full h-full object-cover">
+                    <div class="gallery-overlay absolute inset-0 flex items-end p-4">
+                        <div>
+                            <h3 class="text-white font-bold text-xl">Shawarma</h3>
+                            <p class="text-white">Amman, Jordan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 animate-fade-in delay-300">
+                <button class="px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition flex items-center mx-auto">
+                    <span>View Full Gallery</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button
+</body>
+</html>
